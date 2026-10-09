@@ -8,7 +8,12 @@ import java.io.*;
 public class PingService {
 
     public String ping(String host) throws IOException {
-        Process process = Runtime.getRuntime().exec("ping -c 1 " + host);
+        String target = host.trim();
+        if (target.startsWith("-")) {
+            throw new IllegalArgumentException("Invalid host");
+        }
+        String[] command = {"ping", "-c", "1", target};
+        Process process = Runtime.getRuntime().exec(command);
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder output = new StringBuilder();
         String line;
