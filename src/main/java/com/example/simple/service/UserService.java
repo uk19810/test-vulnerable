@@ -19,9 +19,9 @@ public class UserService {
     public List<String> findEmails(String username) throws SQLException {
         List<String> emails = new ArrayList<>();
         Connection conn = dataSource.getConnection();
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT email FROM users WHERE username = '" + username + "'";
-        ResultSet rs = stmt.executeQuery(sql);
+        PreparedStatement stmt = conn.prepareStatement("SELECT email FROM users WHERE username = ?");
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             emails.add(rs.getString("email"));
         }
